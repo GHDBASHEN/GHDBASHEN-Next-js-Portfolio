@@ -7,9 +7,22 @@ export default function AdminDashboard() {
   const router = useRouter();
 
   useEffect(() => {
+    // --- UPDATED FETCH LOGIC WITH ERROR HANDLING ---
     fetch('/api/projects')
-      .then((res) => res.json())
-      .then((data) => setProjects(data));
+      .then((res) => {
+        // If the server responds with an error status (like 500), throw an error
+        if (!res.ok) {
+          throw new Error(`Failed to fetch: ${res.status} ${res.statusText}`);
+        }
+        return res.json();
+      })
+      .then((data) => {
+        setProjects(data);
+      })
+      .catch((error) => {
+        // Log the error to the browser's console
+        console.error("Error fetching projects:", error);
+      });
   }, []);
 
   const handleDelete = async (id) => {

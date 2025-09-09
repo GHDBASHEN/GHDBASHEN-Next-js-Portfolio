@@ -24,5 +24,4 @@ const ProjectSchema = new mongoose.Schema({
   },
 });
 
-// Prevent model overwrite in development
 export default mongoose.models.Project || mongoose.model('Project', ProjectSchema);

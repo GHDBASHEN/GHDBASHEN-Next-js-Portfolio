@@ -7,8 +7,9 @@ export default function ProjectCard({ project }) {
         <Image
           src={project.imageUrl}
           alt={project.name}
-          layout="fill"
-          objectFit="cover"
+          fill
+          className="object-cover"
+          unoptimized={true} // <-- ADD THIS LINE
         />
       </div>
       <div className="p-6">
