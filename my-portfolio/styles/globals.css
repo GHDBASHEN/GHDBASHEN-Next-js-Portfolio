@@ -80,3 +80,44 @@ body {
   pointer-events: none; /* Allows clicks to pass through */
   transition: opacity 0.3s ease-in-out; /* Smooth transition for overlay */
 }
+
+@keyframes fly-path {
+  0% {
+    transform: translate(-100vw, 0vh) rotate(-10deg);
+  }
+  10% {
+    transform: translate(0vw, -55vh) rotate(15deg); /* curve up */
+  }
+  20% {
+    transform: translate(20vw, 10vh) rotate(-10deg); /* swoop down */
+  }
+  30% {
+    transform: translate(40vw, -20vh) rotate(25deg); /* sharp climb */
+  }
+  40% {
+    transform: translate(60vw, 15vh) rotate(-15deg); /* dive */
+  }
+  50% {
+    transform: translate(80vw, -10vh) rotate(20deg); /* bank right */
+  }
+  60% {
+    transform: translate(100vw, 20vh) rotate(-20deg); /* big swoop */
+  }
+  70% {
+    transform: translate(80vw, -25vh) rotate(30deg); /* loop back up */
+  }
+  80% {
+    transform: translate(50vw, 15vh) rotate(-25deg); /* curve down */
+  }
+  90% {
+    transform: translate(20vw, -20vh) rotate(20deg); /* back up */
+  }
+  100% {
+    transform: translate(-20vw, 0vh) rotate(-10deg); /* full cycle reset */
+  }
+}
+
+.plane-mover {
+  position: absolute;
+  animation: fly-path 12s ease-in-out infinite;
+}
