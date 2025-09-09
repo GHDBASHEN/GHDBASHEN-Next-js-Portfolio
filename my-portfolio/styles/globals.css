@@ -56,5 +56,5 @@ body {
 }
 
 .animate-flip-quick {
-  animation: flip-horizontal 3s linear infinite; /* Very fast flip */
+  animation: flip-horizontal 0.00001s linear infinite; /* Very fast flip */
 }

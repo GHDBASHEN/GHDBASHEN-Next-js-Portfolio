@@ -1,48 +1,71 @@
 import Image from 'next/image';
 import { useInView } from 'react-intersection-observer';
-import useMousePosition from '../hooks/useMousePosition'; // Import the new hook
+import { useRef, useState, useEffect } from 'react';
 
 export default function AboutSection() {
-  const { ref: sectionRef, inView } = useInView({
+  const { ref: inViewRef, inView } = useInView({
     triggerOnce: true,
     threshold: 0.1,
   });
 
-  // Get the live mouse position
-  const { x, y } = useMousePosition();
-  
-  // Calculate movement based on mouse position relative to the center of the screen
-  // We check for 'window' to prevent errors during server-side rendering
-  const moveX1 = typeof window !== 'undefined' ? (x - window.innerWidth / 2) / 40 : 0;
-  const moveY1 = typeof window !== 'undefined' ? (y - window.innerHeight / 2) / 40 : 0;
-  
-  const moveX2 = typeof window !== 'undefined' ? (x - window.innerWidth / 2) / 25 : 0;
-  const moveY2 = typeof window !== 'undefined' ? (y - window.innerHeight / 2) / 25 : 0;
+  const sectionRef = useRef(null);
+  const [isFlipping, setIsFlipping] = useState(false);
+  const flipTimeoutRef = useRef(null);
+
+  const handleMouseMove = (e) => {
+    if (!sectionRef.current) return;
+    const rect = sectionRef.current.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    sectionRef.current.style.setProperty('--mouse-x', `${x}px`);
+    sectionRef.current.style.setProperty('--mouse-y', `${y}px`);
+  };
+
+  // Effect to start and stop the flipping animation
+  useEffect(() => {
+    if (inView) {
+      setIsFlipping(true); // Start flipping when in view
+
+      // Set a timeout to stop flipping after 3 seconds
+      flipTimeoutRef.current = setTimeout(() => {
+        setIsFlipping(false);
+      }, 5000); // 3000 milliseconds = 3 seconds
+    }
+
+    // Cleanup function for the effect
+    return () => {
+      clearTimeout(flipTimeoutRef.current);
+    };
+  }, [inView]); // Only depend on 'inView' to prevent the loop
 
 
   return (
-    <section id="about" className="min-h-screen flex items-center overflow-hidden"> {/* Added overflow-hidden */}
-      <div ref={sectionRef} className="container mx-auto px-6 py-20">
+    <section 
+      id="about" 
+      ref={sectionRef}
+      onMouseMove={handleMouseMove}
+      className="relative min-h-screen flex items-center overflow-hidden bg-gray-900"
+    >
+      {/* Spotlight Effect Div */}
+      <div 
+        className="pointer-events-none absolute -inset-px rounded-xl transition-all duration-300"
+        style={{
+          background: `radial-gradient(400px circle at var(--mouse-x) var(--mouse-y), rgba(14, 165, 233, 0.15), transparent 80%)`,
+        }}
+      />
+      
+      <div ref={inViewRef} className="container mx-auto px-6 py-20">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
           
-          {/* Left Column: Text Content with scroll and parallax animations */}
+          {/* Left Column: Text Content */}
           <div className={`text-left transition-all duration-1000 ease-out ${inView ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-10'}`}>
-            <h2 
-              className="text-4xl font-bold mb-4 text-white transition-transform duration-200 ease-out"
-              style={{ transform: `translate(${moveX1}px, ${moveY1}px)` }}
-            >
+            <h2 className="text-4xl font-bold mb-4 text-white">
               About Me
             </h2>
-            <p 
-              className="text-lg text-gray-400 mb-8 transition-transform duration-200 ease-out"
-              style={{ transform: `translate(${moveX1 * 0.8}px, ${moveY1 * 0.8}px)`, transitionDelay: '50ms' }}
-            >
+            <p className="text-lg text-gray-400 mb-8">
               I'm a passionate developer with experience in building modern, responsive, and scalable web applications. I love tackling challenges and continuously learning new technologies to bring ideas to life.
             </p>
-            <div 
-              className="transition-transform duration-200 ease-out"
-              style={{ transform: `translate(${moveX1 * 0.6}px, ${moveY1 * 0.6}px)`, transitionDelay: '100ms' }}
-            >
+            <div>
               <a 
                 href="/Resume.pdf"
                 download="My-Resume.pdf"
@@ -53,20 +76,15 @@ export default function AboutSection() {
             </div>
           </div>
 
-          {/* Right Column: Image with scroll, parallax, and hover animations */}
-          <div className="flex justify-center">
-            <div 
-              className={`transition-all duration-1000 ease-out ${inView ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-10'}`}
-              style={{ transform: `translate(${moveX2}px, ${moveY2}px)` }}
-            >
-              <Image
-                src="/profile.png"
-                alt="A picture of me"
-                width={350}
-                height={350}
-                className="rounded-full shadow-2xl object-cover transition-transform duration-300 hover:scale-105 hover:shadow-cyan-500/50"
-              />
-            </div>
+          {/* Right Column: Image with Flipping Animation */}
+          <div className={`flex justify-center transition-all duration-1000 ease-out ${inView ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-10'}`}>
+            <Image
+              src="/profile.png"
+              alt="A picture of me"
+              width={350}
+              height={350}
+              className={`rounded-full shadow-2xl object-cover transition-transform duration-300 hover:scale-105 ${isFlipping ? 'animate-flip-quick' : ''}`}
+            />
           </div>
         </div>
       </div>
