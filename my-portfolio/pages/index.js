@@ -12,7 +12,7 @@ export default function HomePage({ projects }) {
       <ProjectsSection projects={projects} />
 
       <div className="container mx-auto px-6 py-8 text-center text-gray-500">
-        <p>&copy; 2025 Your Name. All Rights Reserved.</p>
+        <p>&copy; 2025 GHDBASHEN. All Rights Reserved.</p>
       </div>
     </div>
   );
