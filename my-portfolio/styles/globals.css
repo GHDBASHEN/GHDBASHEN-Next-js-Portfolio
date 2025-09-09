@@ -37,6 +37,8 @@ body {
   animation: shake 0.8s cubic-bezier(.36,.07,.19,.97) both infinite;
 }
 
+/* ... keep your existing styles at the top ... */
+
 @keyframes flip-horizontal {
   0% {
     transform: perspective(1000px) rotateY(0deg);
@@ -56,5 +58,25 @@ body {
 }
 
 .animate-flip-quick {
-  animation: flip-horizontal 0.00001s linear infinite; /* Very fast flip */
+  animation: flip-horizontal 0.00008s linear infinite; /* Adjust speed here if needed */
+}
+
+/* New CSS for gradient effect */
+.gradient-overlay {
+  filter: grayscale(100%) brightness(50%); /* Start with grayscale and dark */
+  position: relative;
+  overflow: hidden; /* Ensure gradient doesn't bleed */
+}
+
+.gradient-overlay::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(to right, rgba(14, 165, 233, 0.5), rgba(124, 58, 237, 0.5)); /* Cyan to Purple with 50% opacity */
+  mix-blend-mode: multiply; /* Blends the gradient with the image */
+  pointer-events: none; /* Allows clicks to pass through */
+  transition: opacity 0.3s ease-in-out; /* Smooth transition for overlay */
 }

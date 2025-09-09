@@ -21,22 +21,19 @@ export default function AboutSection() {
     sectionRef.current.style.setProperty('--mouse-y', `${y}px`);
   };
 
-  // Effect to start and stop the flipping animation
   useEffect(() => {
     if (inView) {
-      setIsFlipping(true); // Start flipping when in view
+      setIsFlipping(true);
 
-      // Set a timeout to stop flipping after 3 seconds
       flipTimeoutRef.current = setTimeout(() => {
         setIsFlipping(false);
-      }, 5000); // 3000 milliseconds = 3 seconds
+      }, 1000); // 3 seconds
     }
 
-    // Cleanup function for the effect
     return () => {
       clearTimeout(flipTimeoutRef.current);
     };
-  }, [inView]); // Only depend on 'inView' to prevent the loop
+  }, [inView]);
 
 
   return (
@@ -76,15 +73,17 @@ export default function AboutSection() {
             </div>
           </div>
 
-          {/* Right Column: Image with Flipping Animation */}
+          {/* Right Column: Image with Flipping Animation and Gradient Effect */}
           <div className={`flex justify-center transition-all duration-1000 ease-out ${inView ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-10'}`}>
-            <Image
-              src="/profile.png"
-              alt="A picture of me"
-              width={350}
-              height={350}
-              className={`rounded-full shadow-2xl object-cover transition-transform duration-300 hover:scale-105 ${isFlipping ? 'animate-flip-quick' : ''}`}
-            />
+            <div className={`relative rounded-full overflow-hidden ${isFlipping ? 'animate-flip-quick gradient-overlay' : ''}`}>
+                <Image
+                src="/profile.png"
+                alt="A picture of me"
+                width={350}
+                height={350}
+                className="rounded-full shadow-2xl object-cover transition-transform duration-300 hover:scale-105"
+                />
+            </div>
           </div>
         </div>
       </div>
