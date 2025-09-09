@@ -36,3 +36,25 @@ body {
 .animate-shake {
   animation: shake 0.8s cubic-bezier(.36,.07,.19,.97) both infinite;
 }
+
+@keyframes flip-horizontal {
+  0% {
+    transform: perspective(1000px) rotateY(0deg);
+  }
+  25% {
+    transform: perspective(1000px) rotateY(90deg);
+  }
+  50% {
+    transform: perspective(1000px) rotateY(180deg);
+  }
+  75% {
+    transform: perspective(1000px) rotateY(270deg);
+  }
+  100% {
+    transform: perspective(1000px) rotateY(360deg);
+  }
+}
+
+.animate-flip-quick {
+  animation: flip-horizontal 3s linear infinite; /* Very fast flip */
+}
