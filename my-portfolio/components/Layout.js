@@ -1,13 +1,9 @@
-// File: components/Layout.js
+import Header from './Header';
 
-// ✅ ENSURE THIS IMPORT IS CORRECT (no curly braces)
-import Navbar from './Navbar'; 
-
-// ✅ ENSURE THIS LINE SAYS "export default"
 export default function Layout({ children }) {
   return (
-    <div className="min-h-screen bg-gray-100">
-      <Navbar />
+    <div className="min-h-screen">
+      <Header />
       <main>{children}</main>
     </div>
   );

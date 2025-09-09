@@ -40,7 +40,7 @@ export default function AdminDashboard() {
   };
 
   return (
-    <div className="container mx-auto p-8">
+    <div className="container mx-auto p-8 pt-24">
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-3xl font-bold">Admin Dashboard</h1>
         <Link href="/admin/add-project" className="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-600">
