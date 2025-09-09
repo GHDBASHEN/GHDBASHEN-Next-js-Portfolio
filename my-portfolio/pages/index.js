@@ -20,20 +20,12 @@ export default function HomePage({ projects }) {
 
 // Data fetching remains the same
 export async function getStaticProps() {
-  // ... your existing getStaticProps logic ...
   await dbConnect();
-  const result = await Project.find({}).sort({ createdAt: -1 });
-  const projects = result.map((doc) => {
-    const project = doc.toObject();
-    project._id = project._id.toString();
-    project.createdAt = project.createdAt.toString();
-    Object.keys(project).forEach(key => {
-        if (project[key] instanceof Date) {
-            project[key] = project[key].toISOString();
-        }
-    });
-    return project;
-  });
+
+  // This line finds all projects and sorts them by creation date (newest first)
+  const result = await Project.find({}).sort({ createdAt: 1 });
+  console.log("RAW DATABASE RESULT:", result);
+  const projects = JSON.parse(JSON.stringify(result));
 
   return {
     props: {
