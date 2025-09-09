@@ -1,0 +1,23 @@
+[
+  {
+    "id": "1",
+    "name": "E-commerce Website",
+    "description": "A full-featured e-commerce platform built with React and Node.js.",
+    "projectUrl": "https://example.com",
+    "imageUrl": "/uploads/placeholder.png"
+  },
+  {
+    "id": "2",
+    "name": "Task Management App",
+    "description": "A productivity app to help users manage their daily tasks.",
+    "projectUrl": "https://example.com",
+    "imageUrl": "/uploads/placeholder.png"
+  },
+  {
+    "id": "1757344757757",
+    "name": "Deandra Bolgoda",
+    "description": "Created B&CM System\r\n",
+    "projectUrl": "http://deandrabolgoda.lk/",
+    "imageUrl": "/uploads/1757344757748_Screenshot 2025-08-17 123746.png"
+  }
+]
