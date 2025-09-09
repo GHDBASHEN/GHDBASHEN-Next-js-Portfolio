@@ -45,11 +45,11 @@ export default function AdminDashboard() {
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
             {projects.map((project) => (
-              <tr key={project.id}>
+              <tr key={project._id}>
                 <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{project.name}</td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                  <button onClick={() => router.push(`/admin/edit/${project.id}`)} className="text-indigo-600 hover:text-indigo-900 mr-4">Edit</button>
-                  <button onClick={() => handleDelete(project.id)} className="text-red-600 hover:text-red-900">Delete</button>
+                  <button onClick={() => router.push(`/admin/edit/${project._id}`)} className="text-indigo-600 hover:text-indigo-900 mr-4">Edit</button>
+                  <button onClick={() => handleDelete(project._id)} className="text-red-600 hover:text-red-900">Delete</button>
                 </td>
               </tr>
             ))}

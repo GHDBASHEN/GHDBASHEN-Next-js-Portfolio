@@ -13,7 +13,7 @@ export default function ProjectForm({ projectToEdit }) {
     
     // For editing, we send JSON
     if (projectToEdit) {
-      const response = await fetch(`/api/projects/${projectToEdit.id}`, {
+      const response = await fetch(`/api/projects/${projectToEdit._id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name, description, projectUrl }),

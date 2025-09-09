@@ -3,11 +3,11 @@ import { useRouter } from 'next/router';
 import { useState, useEffect } from 'react';
 import Cookies from 'js-cookie';
 
+// ✅ ENSURE THIS LINE SAYS "export default"
 export default function Navbar() {
   const router = useRouter();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  // Check for the 'isLoggedIn' cookie when the component mounts
   useEffect(() => {
     const loggedInStatus = Cookies.get('isLoggedIn');
     if (loggedInStatus === 'true') {
@@ -15,12 +15,12 @@ export default function Navbar() {
     } else {
       setIsLoggedIn(false);
     }
-  }, [router.asPath]); // Re-check on route change
+  }, [router.asPath]);
 
   const handleLogout = async () => {
     const response = await fetch('/api/auth/logout');
     if (response.ok) {
-      setIsLoggedIn(false); // Update UI state immediately
+      setIsLoggedIn(false);
       router.push('/admin/login');
     }
   };
