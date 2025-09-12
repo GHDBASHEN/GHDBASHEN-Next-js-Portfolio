@@ -53,6 +53,7 @@ export default function HomeSection() {
     transition: 'transform 0.5s ease-out',
   };
 
+  // Helper function for staggered text animations
   const getAnimationClasses = () => {
     return `transition-all duration-700 ease-out ${inView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-5'}`;
   };
@@ -64,7 +65,7 @@ export default function HomeSection() {
       onMouseMove={handleSectionMouseMove}
       className="relative min-h-screen flex items-center overflow-hidden"
     >
-      {/* Spotlight Effect Div (color changed to blue) */}
+      {/* Spotlight Effect Div */}
       <div 
         className="pointer-events-none absolute -inset-px rounded-xl transition-all duration-300"
         style={{
@@ -78,13 +79,13 @@ export default function HomeSection() {
           {/* Left Column: Animated Text Content */}
           <div>
             <p className={`text-xl text-gray-500 mb-2 ${getAnimationClasses()}`} style={{ transitionDelay: '200ms' }}>
-              Hi, I'm Ashen
+              Hi, I&apos;m Ashen
             </p>
             <h1 className={`text-7xl md:text-8xl font-extrabold text-gray-800 mb-4 tracking-tight ${getAnimationClasses()}`} style={{ transitionDelay: '400ms' }}>
               DEVELOPER
             </h1>
             <p className={`text-lg text-gray-600 mb-8 max-w-md ${getAnimationClasses()}`} style={{ transitionDelay: '600ms' }}>
-              I'm an enthusiastic software engineering student passionate about building modern web solutions.
+              I&apos;m an enthusiastic software engineering student passionate about building modern web solutions.
             </p>
             <div className={getAnimationClasses()} style={{ transitionDelay: '800ms' }}>
               <a 
@@ -100,19 +101,17 @@ export default function HomeSection() {
 
           {/* Right Column: Animated Image */}
           <div className="absolute bottom-0 right-0 h-full w-1/2 flex items-end justify-center pointer-events-none md:justify-end">
-            {/* This outer div handles the initial scroll-reveal animation */}
             <div 
               className={`relative w-[600px] h-[700px] transition-all duration-1000 ease-out ${inView ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-20'}`} 
               style={{ transitionDelay: '500ms' }}
             >
-              {/* This inner div handles the 3D tilt effect */}
               <div
                 ref={imageContainerRef}
                 onMouseMove={handleImageMouseMove}
                 onMouseLeave={handleMouseLeave}
                 onMouseEnter={() => setIsHovered(true)}
                 style={isHovered ? tiltStyle : resetStyle}
-                className="w-full h-full pointer-events-auto" // Re-enable pointer events for hover
+                className="w-full h-full pointer-events-auto"
               >
                 <Image
                   src="/GHDBASHEN.png"
