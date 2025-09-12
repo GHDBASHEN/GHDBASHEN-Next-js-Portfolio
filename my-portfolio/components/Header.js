@@ -92,6 +92,7 @@ export default function Header() {
         {/* Centered Navigation */}
         <nav className="flex-none flex justify-center">
             <ul className="flex items-center space-x-2 text-sm">
+               <li><a href="#home" className="text-gray-300 hover:text-white px-3 py-1 rounded-full transition-colors">Home</a></li>
               <li><a href="#about" className="text-gray-300 hover:text-white px-3 py-1 rounded-full transition-colors">About</a></li>
               <li><a href="#services" className="text-gray-300 hover:text-white px-3 py-1 rounded-full transition-colors">Services</a></li>
               <li><a href="#projects" className="text-gray-300 hover:text-white px-3 py-1 rounded-full transition-colors">Projects</a></li>

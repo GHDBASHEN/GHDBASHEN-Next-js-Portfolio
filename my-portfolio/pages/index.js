@@ -3,10 +3,12 @@ import Project from '../models/Project';
 import AboutSection from '../components/AboutSection';
 import ServicesSection from '../components/ServicesSection'; // Import the new section
 import ProjectsSection from '../components/ProjectsSection';
+import HomeSection from '../components/HomeSection';
 
 export default function HomePage({ projects }) {
   return (
     <div>
+      <HomeSection />
       <AboutSection />
       <ServicesSection /> {/* Use the new section here */}
       <ProjectsSection projects={projects} />
