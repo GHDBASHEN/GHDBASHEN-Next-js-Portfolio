@@ -84,7 +84,7 @@ export default function AboutSection() {
                             <p className="text-gray-300"><span className="font-bold w-20 inline-block text-gray-100">Name</span> : G.H.D.B. Ashen</p>
                             <p className="text-gray-300"><span className="font-bold w-20 inline-block text-gray-100">From</span> : Kalutara  </p>
                             <p className="text-gray-300"><span className="font-bold w-20 inline-block text-gray-100">Email</span> : ghdbashen@gmail.com</p>
-                            <p className="text-gray-300"><span className="font-bold w-20 inline-block text-gray-100">Current CGPA</span> : 3.17</p>
+                            <p className="text-gray-300"><span className="font-bold w-20 inline-block text-gray-100">CGPA</span> : 3.17</p>
                         </div>
 
                         <a
