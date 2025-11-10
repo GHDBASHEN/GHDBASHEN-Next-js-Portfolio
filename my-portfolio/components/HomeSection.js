@@ -81,7 +81,7 @@ export default function HomeSection() {
             <p className={`text-xl text-gray-500 mb-2 ${getAnimationClasses()}`} style={{ transitionDelay: '200ms' }}>
               Hi, I&apos;m Ashen
             </p>
-            <h1 className={`text-7xl md:text-8xl font-extrabold text-gray-800 mb-4 tracking-tight ${getAnimationClasses()}`} style={{ transitionDelay: '400ms' }}>
+            <h1 className={`text-7xl md:text-8xl font-extrabold text-gray-500 mb-4 tracking-tight ${getAnimationClasses()}`} style={{ transitionDelay: '400ms' }}>
               DEVELOPER
             </h1>
             <p className={`text-lg text-gray-600 mb-8 max-w-md ${getAnimationClasses()}`} style={{ transitionDelay: '600ms' }}>
