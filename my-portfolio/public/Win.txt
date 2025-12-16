@@ -1,0 +1,36 @@
+DECLARE EXIT HANDLER FOR 1062
+BEGIN
+SELECT 'DUPLICATE KEY ERROR' AS errorMessage;
+END;
+///
+count_loop: loop
+	if c < 1 then
+	leave count_loop;
+end if;
+	set a = a + n;
+	set c = c - 1;
+end loop count_loop;
+////
+-- Enable event scheduler
+SET GLOBAL event_scheduler = ON;
+
+
+-- Event to delete borrow records older than 2 years
+CREATE EVENT ev_DeleteOldBorrow
+ON SCHEDULE EVERY 1 MONTH
+DO
+DELETE FROM Borrow
+WHERE BorrowDate < DATE_SUB(CURDATE(), INTERVAL 2 YEAR);
+
+
+-- Event to generate monthly borrow report
+CREATE TABLE MonthlyReport (
+    ReportDate DATE,
+    TotalBorrows INT
+);
+
+CREATE EVENT ev_MonthlyBorrowReport
+ON SCHEDULE EVERY 1 MONTH
+DO
+INSERT INTO MonthlyReport
+SELECT CURDATE(), COUNT(*) FROM Borrow;

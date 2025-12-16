@@ -1,0 +1,143 @@
+view...............
+
+create view staff_details as
+select  l_id, l_name, l_desig, l_salary from academic_staff;
+
+select * from staff_details;
+
+
+function...........
+
+DELIMITER //
+create function customerFullName( f_name varchar(100), l_name varchar(100))
+returns varchar(200)
+deterministic
+begin
+	declare name varchar(200);
+    set name =  concat(f_name, ' ', l_name);
+    return name;
+end //
+DELIMITER ;
+
+select customer_id, customerFullName(first_name, last_name) from customer;
+..................................
+DELIMITER //
+create function getAvg()
+returns decimal(10,2)
+deterministic
+begin
+	declare avgv decimal(9,2);
+	select avg(salary) into avgv from employee;
+    return avgv;
+end //
+DELIMITER ;
+
+select getAvg();
+
+procedure...................
+
+DELIMITER //
+create procedure getAllLogin()
+begin
+	select * from login;
+end //
+DELIMITER ;
+
+call getAllLogin();
+
+.........................
+DELIMITER //
+create procedure usp_GetLastName(IN emp_id char(4), out lname varchar(100))
+begin
+	select E_lname into lname from employee where eid = emp_id;
+end //
+DELIMITER ;
+
+call usp_GetLastName('e001', @lname);
+select @lname;
+
+
+index..................
+
+create index id_ss on student(name);  nonclusterd index
+create unique index on student(email); unique index
+create index idx_name on employee(E_fname,E_lname);
+
+
+TRIGGER....................
+
+DELIMITER //
+
+CREATE TRIGGER sample_trigger
+BEFORE INSERT ON STUDENT FOR EACH ROW
+BEGIN
+    IF NEW.Score < 35 THEN 
+        SET NEW.Grade = 'FAIL';
+    ELSE 
+        SET NEW.Grade = 'PASS';
+    END IF;
+END //
+
+DELIMITER ;
+
+..........................
+DELIMITER //
+
+CREATE TRIGGER after_trigger
+AFTER INSERT ON USERS FOR EACH ROW
+BEGIN
+    IF NEW.BIRTH_DATE IS NOT NULL THEN
+        INSERT INTO PUSH_NOTIFICATIONS VALUES
+        (new.ID, new.BIRTH_DATE, CONCAT('Happy Birthday, ', NEW.NAME, '!'));
+    END IF;
+END //
+
+DELIMITER ;
+
+.............................
+DELIMITER $$
+
+CREATE TRIGGER before_update_salesInfo
+BEFORE UPDATE ON sales_info FOR EACH ROW
+BEGIN
+    DECLARE error_msg VARCHAR(255);
+    SET error_msg = ('The new quantity cannot be greater than 2 times the current quantity');
+    
+    IF new.quantity > old.quantity * 2 THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = error_msg;
+    END IF;
+END $$
+
+DELIMITER ;
+...............................
+DELIMITER //
+
+CREATE TRIGGER after_trigger
+AFTER INSERT ON USERS FOR EACH ROW
+BEGIN
+    IF NEW.BIRTH_DATE IS NOT NULL THEN
+        INSERT INTO PUSH_NOTIFICATIONS VALUES
+        (new.ID, new.BIRTH_DATE, CONCAT('Happy Birthday, ', NEW.NAME, '!'));
+    END IF;
+END //
+
+DELIMITER ;
+
+Event.........................
+
+CREATE EVENT cleanup_expired_sessions
+ON SCHEDULE EVERY 1 DAY
+STARTS '2025-12-17 02:00:00'
+ON COMPLETION PRESERVE -- Keep the event definition after it runs
+DO
+BEGIN
+     
+    DELETE FROM session_logs WHERE expiration_time < NOW();
+ 
+END;
+
+
+
+
+
