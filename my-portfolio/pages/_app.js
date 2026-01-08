@@ -1,29 +1,28 @@
 import Layout from '../components/Layout';
-import LoadingAnimation from '../components/LoadingAnimation'; // Import the new component
+import LoadingAnimation from '../components/LoadingAnimation'; 
 import '../styles/globals.css';
 import { useState, useEffect } from 'react';
+// IMPORT THE PROVIDER
+import { ThemeProvider } from '../context/ThemeContext'; 
 
 function MyApp({ Component, pageProps }) {
   const [loading, setLoading] = useState(true);
 
-  // This effect runs once when the app loads
   useEffect(() => {
     const timer = setTimeout(() => {
-      setLoading(false); // Hide the loading screen after 3 seconds
-    }, 4000); // 3000 milliseconds = 3 seconds
-
-    // Cleanup the timer if the component unmounts
+      setLoading(false);
+    }, 4000); 
     return () => clearTimeout(timer);
   }, []);
-
 
   const getLayout = Component.getLayout || ((page) => <Layout>{page}</Layout>);
   
   return (
-    <>
+    // WRAP EVERYTHING HERE
+    <ThemeProvider>
       <LoadingAnimation isLoading={loading} />
       {getLayout(<Component {...pageProps} />)}
-    </>
+    </ThemeProvider>
   );
 }
 

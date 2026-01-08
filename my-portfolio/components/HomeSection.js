@@ -1,127 +1,77 @@
-import Image from 'next/image';
 import { useInView } from 'react-intersection-observer';
-import { useRef, useState } from 'react';
+import { useRef } from 'react';
+// IMPORT THE HOOK
+import { useTheme } from '../context/ThemeContext';
 
 export default function HomeSection() {
+  const { isDarkMode } = useTheme(); // USE THE HOOK
+  
   const { ref: inViewRef, inView } = useInView({
     triggerOnce: true,
-    threshold: 0.2,
+    threshold: 0.1,
   });
 
   const sectionRef = useRef(null);
-  const imageContainerRef = useRef(null); // Ref for the image container
-  const [rotate, setRotate] = useState({ x: 0, y: 0 }); // State for 3D rotation
-  const [isHovered, setIsHovered] = useState(false); // State to track hover
 
-  // This handler updates the main section's spotlight effect
-  const handleSectionMouseMove = (e) => {
-    if (!sectionRef.current) return;
-    const rect = sectionRef.current.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-    sectionRef.current.style.setProperty('--mouse-x', `${x}px`);
-    sectionRef.current.style.setProperty('--mouse-y', `${y}px`);
-  };
-
-  // This handler creates the 3D tilt effect on the image
-  const handleImageMouseMove = (e) => {
-    if (!imageContainerRef.current) return;
-    const rect = imageContainerRef.current.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-    
-    const rotateY = (x / rect.width - 0.5) * -20; // Tilt intensity
-    const rotateX = (y / rect.height - 0.5) * 20; // Tilt intensity
-    
-    setRotate({ x: rotateX, y: rotateY });
-  };
-  
-  // Resets the image tilt when the mouse leaves
-  const handleMouseLeave = () => {
-    setRotate({ x: 0, y: 0 });
-  };
-  
-  // Style for the active 3D tilt
-  const tiltStyle = {
-    transform: `perspective(1000px) rotateX(${rotate.x}deg) rotateY(${rotate.y}deg) scale3d(1.05, 1.05, 1.05)`,
-    transition: 'transform 0.1s ease-out',
-  };
-
-  // Style for when the mouse is not hovering
-  const resetStyle = {
-    transform: 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)',
-    transition: 'transform 0.5s ease-out',
-  };
-
-  // Helper function for staggered text animations
-  const getAnimationClasses = () => {
-    return `transition-all duration-700 ease-out ${inView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-5'}`;
+  const getAnimationClasses = (delay) => {
+    return `transform transition-all duration-1000 cubic-bezier(0.17, 0.55, 0.55, 1) ${
+      inView 
+        ? 'opacity-100 translate-y-0 scale-100' 
+        : 'opacity-0 translate-y-10 scale-90'
+    }`;
   };
 
   return (
     <section 
       id="home" 
       ref={sectionRef}
-      onMouseMove={handleSectionMouseMove}
-      className="relative min-h-screen flex items-center overflow-hidden"
+      className="relative min-h-screen flex items-center justify-center overflow-hidden"
     >
-      {/* Spotlight Effect Div */}
-      <div 
-        className="pointer-events-none absolute -inset-px rounded-xl transition-all duration-300"
-        style={{
-          background: `radial-gradient(600px circle at var(--mouse-x) var(--mouse-y), rgba(14, 165, 233, 0.15), transparent 80%)`,
-        }}
-      />
+      {/* --- VIDEO SWAPPING LOGIC --- */}
+      {/* We use two video tags and toggle opacity for a smooth cross-fade effect */}
       
-      <div ref={inViewRef} className="container mx-auto px-6 py-20 z-10">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-          
-          {/* Left Column: Animated Text Content */}
-          <div>
-            <p className={`text-xl text-gray-500 mb-2 ${getAnimationClasses()}`} style={{ transitionDelay: '200ms' }}>
-              Hi, I&apos;m Ashen
-            </p>
-            <h1 className={`text-7xl md:text-8xl font-extrabold text-gray-500 mb-4 tracking-tight ${getAnimationClasses()}`} style={{ transitionDelay: '400ms' }}>
-              DEVELOPER
-            </h1>
-            <p className={`text-lg text-gray-600 mb-8 max-w-md ${getAnimationClasses()}`} style={{ transitionDelay: '600ms' }}>
-              I&apos;m an enthusiastic software engineering student passionate about building modern web solutions.
-            </p>
-            <div className={getAnimationClasses()} style={{ transitionDelay: '800ms' }}>
-              <a 
-                href="https://www.linkedin.com/in/basith-ashen-a9b38a379/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="bg-red-500 text-white font-bold py-3 px-8 rounded-full hover:bg-red-600 transition-all duration-300 shadow-lg hover:shadow-red-500/50 text-lg"
-              >
-                Hire Me
-              </a>
-            </div>
-          </div>
+      {/* DARK MODE VIDEO (walk.mp4) */}
+      <video 
+        autoPlay loop muted playsInline 
+        className={`absolute top-0 left-0 w-full h-full object-cover z-0 transition-opacity duration-1000 ${isDarkMode ? 'opacity-100' : 'opacity-0'}`}
+      >
+        <source src="/walk.mp4" type="video/mp4" />
+      </video>
 
-          {/* Right Column: Animated Image */}
-          <div className="absolute bottom-0 right-0 h-full w-1/2 flex items-end justify-center pointer-events-none md:justify-end">
-            <div 
-              className={`relative w-[600px] h-[700px] transition-all duration-1000 ease-out ${inView ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-20'}`} 
-              style={{ transitionDelay: '500ms' }}
-            >
-              <div
-                ref={imageContainerRef}
-                onMouseMove={handleImageMouseMove}
-                onMouseLeave={handleMouseLeave}
-                onMouseEnter={() => setIsHovered(true)}
-                style={isHovered ? tiltStyle : resetStyle}
-                className="w-full h-full pointer-events-auto"
-              >
-                <Image
-                  src="/GHDBASHEN.png"
-                  alt="A picture of me"
-                  fill
-                  className="object-contain" 
-                />
-              </div>
-            </div>
-          </div>
+      {/* LIGHT MODE VIDEO (e.g., light.mp4 - make sure you add this file!) */}
+      <video 
+        autoPlay loop muted playsInline 
+        className={`absolute top-0 left-0 w-full h-full object-cover z-0 transition-opacity duration-1000 ${isDarkMode ? 'opacity-0' : 'opacity-100'}`}
+      >
+        {/* REPLACE 'light.mp4' WITH YOUR LIGHT MODE VIDEO FILENAME */}
+        <source src="/light.mp4" type="video/mp4" /> 
+      </video>
+
+
+      {/* Overlay: Darker in Dark Mode, Lighter in Light Mode */}
+      <div className={`absolute top-0 left-0 w-full h-full z-0 transition-colors duration-1000 ${isDarkMode ? 'bg-black/60' : 'bg-white/30'}`}></div>
+      
+      {/* Content */}
+      <div ref={inViewRef} className="container mx-auto px-6 z-10 relative flex flex-col items-center justify-center text-center h-full">
+        <p className={`text-2xl md:text-3xl font-medium mb-4 tracking-wide ${isDarkMode ? 'text-gray-300' : 'text-gray-800'} ${getAnimationClasses()}`} style={{ transitionDelay: '200ms' }}>
+          Hi, I&apos;m Ashen
+        </p>
+
+        <h1 
+          className={`text-6xl md:text-8xl lg:text-9xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r mb-6 tracking-tighter drop-shadow-lg ${isDarkMode ? 'from-white via-gray-200 to-gray-400' : 'from-gray-900 via-gray-700 to-gray-500'} ${getAnimationClasses()}`} 
+          style={{ transitionDelay: '400ms' }}
+        >
+          DEVELOPER
+        </h1>
+
+        <p className={`text-lg md:text-2xl mb-10 max-w-2xl leading-relaxed ${isDarkMode ? 'text-gray-300' : 'text-gray-800'} ${getAnimationClasses()}`} style={{ transitionDelay: '600ms' }}>
+          I&apos;m an enthusiastic software engineering student passionate about building modern web solutions.
+        </p>
+
+        <div className={getAnimationClasses()} style={{ transitionDelay: '800ms' }}>
+          <a href="https://www.linkedin.com/in/basith-ashen-a9b38a379/" target="_blank" rel="noopener noreferrer" className="group relative inline-flex items-center justify-center px-8 py-4 text-lg font-bold text-white transition-all duration-200 bg-red-600 font-pj rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-600 hover:bg-red-700 hover:scale-105">
+            Hire Me
+          </a>
         </div>
       </div>
     </section>

@@ -123,3 +123,33 @@ body {
 }
 
 
+/* --- MOBILE RESPONSIVENESS FIXES --- */
+
+/* 1. Prevent Horizontal Scroll caused by animations */
+html, body {
+  overflow-x: hidden;
+  width: 100%;
+  position: relative;
+}
+
+/* 2. Hide Custom Cursor on Touch Devices 
+   (Assuming your cursor element has a class like .cursor-dot or is a div)
+   Since you use a hook, you likely render a <div style={{left: x, top: y}} /> 
+   somewhere in your Layout or _app.js. Add a class to that div like "custom-cursor" 
+   and use this CSS:
+*/
+@media (max-width: 768px) {
+  .custom-cursor, 
+  [style*="position: fixed"] { /* Fallback to catch fixed elements if unnamed */
+     display: none !important;
+  }
+}
+
+/* 3. Tame the Plane Animation on Mobile */
+@media (max-width: 768px) {
+  .plane-mover {
+    /* Make the plane smaller and the path tighter on mobile */
+    transform: scale(0.5); 
+    animation-duration: 8s; /* Faster on mobile */
+  }
+}
