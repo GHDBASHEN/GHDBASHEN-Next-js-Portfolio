@@ -71,8 +71,8 @@ export default function AboutSection() {
                         </div>
 
                         <a
-                            href="/Resume.pdf"
-                            download="My-Resume.pdf"
+                            href="/Basith Ashen CV.pdf"
+                            download="Basith Ashen CV.pdf"
                             className="inline-block bg-cyan-600 text-white font-bold py-3 px-8 rounded-lg hover:bg-cyan-700 transition-colors duration-300 shadow-lg hover:shadow-cyan-500/50"
                         >
                             Download CV
