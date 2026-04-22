@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useRouter } from 'next/router';
+import Image from 'next/image';
 
 export default function CertificateForm({ certificateToEdit }) {
   const [title, setTitle] = useState(certificateToEdit?.title || '');
@@ -7,42 +8,55 @@ export default function CertificateForm({ certificateToEdit }) {
   const [issueDate, setIssueDate] = useState(certificateToEdit?.issueDate || '');
   const [certificateUrl, setCertificateUrl] = useState(certificateToEdit?.certificateUrl || '');
   const [image, setImage] = useState(null);
+  const [preview, setPreview] = useState(certificateToEdit?.imageUrl || null);
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setImage(file);
+      setPreview(URL.createObjectURL(file));
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     
-    if (certificateToEdit) {
-      const response = await fetch(`/api/certificates/${certificateToEdit._id}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ title, issuer, issueDate, certificateUrl }),
-      });
-      if (response.ok) {
-        alert('Certificate updated successfully!');
-        router.push('/admin');
-      } else {
-        alert('Failed to update certificate.');
-      }
-    } else {
-      const formData = new FormData();
-      formData.append('title', title);
-      formData.append('issuer', issuer);
-      formData.append('issueDate', issueDate);
-      formData.append('certificateUrl', certificateUrl);
+    const formData = new FormData();
+    formData.append('title', title);
+    formData.append('issuer', issuer);
+    formData.append('issueDate', issueDate);
+    formData.append('certificateUrl', certificateUrl);
+    if (image) {
       formData.append('image', image);
+    }
 
-      const response = await fetch('/api/certificates', {
-        method: 'POST',
+    try {
+      const endpoint = certificateToEdit 
+        ? `/api/certificates/${certificateToEdit._id}` 
+        : '/api/certificates';
+      
+      const method = certificateToEdit ? 'PUT' : 'POST';
+
+      const response = await fetch(endpoint, {
+        method: method,
         body: formData,
       });
 
       if (response.ok) {
-        alert('Certificate added successfully!');
+        alert(`Certificate ${certificateToEdit ? 'updated' : 'added'} successfully!`);
         router.push('/admin');
       } else {
-        alert('Failed to add certificate.');
+        const errorData = await response.json();
+        alert(`Failed: ${errorData.message || errorData.error || 'Unknown error'}`);
       }
+    } catch (err) {
+      console.error(err);
+      alert('An error occurred.');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -64,15 +78,33 @@ export default function CertificateForm({ certificateToEdit }) {
         <label htmlFor="certificateUrl" className="block text-sm font-medium text-gray-700">Certificate URL (Optional)</label>
         <input type="url" id="certificateUrl" value={certificateUrl} onChange={(e) => setCertificateUrl(e.target.value)} className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-cyan-500 focus:border-cyan-500"/>
       </div>
-      {!certificateToEdit && (
-        <div>
-          <label htmlFor="image" className="block text-sm font-medium text-gray-700">Certificate Image</label>
-          <input type="file" id="image" onChange={(e) => setImage(e.target.files[0])} required className="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-cyan-50 file:text-cyan-600 hover:file:bg-cyan-100"/>
-        </div>
-      )}
-      <button type="submit" className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-cyan-600 hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500 transition-colors">
-        {certificateToEdit ? 'Update Certificate' : 'Add Certificate'}
+      
+      <div>
+        <label htmlFor="image" className="block text-sm font-medium text-gray-700">
+          Certificate Image {certificateToEdit && '(Optional if not changing)'}
+        </label>
+        {preview && (
+          <div className="mt-2 mb-4 relative h-40 w-full border rounded-lg overflow-hidden bg-gray-50">
+             <Image src={preview} alt="Preview" fill className="object-contain" />
+          </div>
+        )}
+        <input 
+          type="file" 
+          id="image" 
+          onChange={handleImageChange} 
+          required={!certificateToEdit} 
+          className="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-cyan-50 file:text-cyan-600 hover:file:bg-cyan-100"
+        />
+      </div>
+
+      <button 
+        type="submit" 
+        disabled={loading}
+        className={`w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white transition-colors ${loading ? 'bg-gray-400' : 'bg-cyan-600 hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500'}`}
+      >
+        {loading ? 'Processing...' : (certificateToEdit ? 'Update Certificate' : 'Add Certificate')}
       </button>
     </form>
   );
 }
+

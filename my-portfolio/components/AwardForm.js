@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useRouter } from 'next/router';
+import Image from 'next/image';
 
 export default function AwardForm({ awardToEdit }) {
   const [title, setTitle] = useState(awardToEdit?.title || '');
@@ -7,42 +8,55 @@ export default function AwardForm({ awardToEdit }) {
   const [year, setYear] = useState(awardToEdit?.year || '');
   const [description, setDescription] = useState(awardToEdit?.description || '');
   const [image, setImage] = useState(null);
+  const [preview, setPreview] = useState(awardToEdit?.imageUrl || null);
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setImage(file);
+      setPreview(URL.createObjectURL(file));
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     
-    if (awardToEdit) {
-      const response = await fetch(`/api/awards/${awardToEdit._id}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ title, organization, year, description }),
-      });
-      if (response.ok) {
-        alert('Award updated successfully!');
-        router.push('/admin');
-      } else {
-        alert('Failed to update award.');
-      }
-    } else {
-      const formData = new FormData();
-      formData.append('title', title);
-      formData.append('organization', organization);
-      formData.append('year', year);
-      formData.append('description', description);
+    const formData = new FormData();
+    formData.append('title', title);
+    formData.append('organization', organization);
+    formData.append('year', year);
+    formData.append('description', description);
+    if (image) {
       formData.append('image', image);
+    }
 
-      const response = await fetch('/api/awards', {
-        method: 'POST',
+    try {
+      const endpoint = awardToEdit 
+        ? `/api/awards/${awardToEdit._id}` 
+        : '/api/awards';
+      
+      const method = awardToEdit ? 'PUT' : 'POST';
+
+      const response = await fetch(endpoint, {
+        method: method,
         body: formData,
       });
 
       if (response.ok) {
-        alert('Award added successfully!');
+        alert(`Award ${awardToEdit ? 'updated' : 'added'} successfully!`);
         router.push('/admin');
       } else {
-        alert('Failed to add award.');
+        const errorData = await response.json();
+        alert(`Failed: ${errorData.message || errorData.error || 'Unknown error'}`);
       }
+    } catch (err) {
+      console.error(err);
+      alert('An error occurred.');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -64,15 +78,33 @@ export default function AwardForm({ awardToEdit }) {
         <label htmlFor="description" className="block text-sm font-medium text-gray-700">Description (Optional)</label>
         <textarea id="description" value={description} onChange={(e) => setDescription(e.target.value)} rows="3" className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-amber-500 focus:border-amber-500"></textarea>
       </div>
-      {!awardToEdit && (
-        <div>
-          <label htmlFor="image" className="block text-sm font-medium text-gray-700">Award Image</label>
-          <input type="file" id="image" onChange={(e) => setImage(e.target.files[0])} required className="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-amber-50 file:text-amber-600 hover:file:bg-amber-100"/>
-        </div>
-      )}
-      <button type="submit" className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-amber-600 hover:bg-amber-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-500 transition-colors">
-        {awardToEdit ? 'Update Award' : 'Add Award'}
+      
+      <div>
+        <label htmlFor="image" className="block text-sm font-medium text-gray-700">
+          Award Image {awardToEdit && '(Optional if not changing)'}
+        </label>
+        {preview && (
+          <div className="mt-2 mb-4 relative h-40 w-full border rounded-lg overflow-hidden bg-gray-50">
+             <Image src={preview} alt="Preview" fill className="object-contain" />
+          </div>
+        )}
+        <input 
+          type="file" 
+          id="image" 
+          onChange={handleImageChange} 
+          required={!awardToEdit} 
+          className="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-amber-50 file:text-amber-600 hover:file:bg-amber-100"
+        />
+      </div>
+
+      <button 
+        type="submit" 
+        disabled={loading}
+        className={`w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white transition-colors ${loading ? 'bg-gray-400' : 'bg-amber-600 hover:bg-amber-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-500'}`}
+      >
+        {loading ? 'Processing...' : (awardToEdit ? 'Update Award' : 'Add Award')}
       </button>
     </form>
   );
 }
+
