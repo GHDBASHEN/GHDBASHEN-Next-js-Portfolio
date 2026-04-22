@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-import AwardForm from '../../components/AwardForm';
+import AwardForm from '../../../components/AwardForm';
 
 export default function EditAward() {
   const router = useRouter();
@@ -12,7 +12,10 @@ export default function EditAward() {
       fetch(`/api/awards/${id}`)
         .then((res) => res.json())
         .then((data) => setAward(data))
-        .catch((err) => console.error(err));
+        .catch(() => {
+        // Log the error to the browser's console
+        console.error("Error fetching projects:");
+      });
     }
   }, [id]);
 

@@ -44,7 +44,7 @@ export default async function handler(req, res) {
     res.setHeader('Set-Cookie', [accessTokenCookie, refreshTokenCookie, statusCookie]);
     res.status(200).json({ message: 'Login successful' });
 
-  } catch (error) {
+  } catch {
     res.status(500).json({ message: 'An internal server error occurred' });
   }
 }

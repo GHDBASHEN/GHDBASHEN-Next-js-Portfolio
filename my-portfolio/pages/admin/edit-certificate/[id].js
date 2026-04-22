@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-import CertificateForm from '../../components/CertificateForm';
+import CertificateForm from '../../../components/CertificateForm';
 
 export default function EditCertificate() {
   const router = useRouter();

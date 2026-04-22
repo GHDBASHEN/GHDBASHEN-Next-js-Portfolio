@@ -13,7 +13,7 @@ export default function HomeSection() {
 
   const sectionRef = useRef(null);
 
-  const getAnimationClasses = (delay) => {
+  const getAnimationClasses = () => {
     return `transform transition-all duration-1000 cubic-bezier(0.17, 0.55, 0.55, 1) ${
       inView 
         ? 'opacity-100 translate-y-0 scale-100' 
