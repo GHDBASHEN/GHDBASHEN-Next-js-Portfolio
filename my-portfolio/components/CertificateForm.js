@@ -7,6 +7,7 @@ export default function CertificateForm({ certificateToEdit }) {
   const [issuer, setIssuer] = useState(certificateToEdit?.issuer || '');
   const [issueDate, setIssueDate] = useState(certificateToEdit?.issueDate || '');
   const [certificateUrl, setCertificateUrl] = useState(certificateToEdit?.certificateUrl || '');
+  const [description, setDescription] = useState(certificateToEdit?.description || '');
   const [image, setImage] = useState(null);
   const [preview, setPreview] = useState(certificateToEdit?.imageUrl || null);
   const [loading, setLoading] = useState(false);
@@ -29,6 +30,7 @@ export default function CertificateForm({ certificateToEdit }) {
     formData.append('issuer', issuer);
     formData.append('issueDate', issueDate);
     formData.append('certificateUrl', certificateUrl);
+    formData.append('description', description);
     if (image) {
       formData.append('image', image);
     }
@@ -77,6 +79,10 @@ export default function CertificateForm({ certificateToEdit }) {
       <div>
         <label htmlFor="certificateUrl" className="block text-sm font-medium text-gray-700">Certificate URL (Optional)</label>
         <input type="url" id="certificateUrl" value={certificateUrl} onChange={(e) => setCertificateUrl(e.target.value)} className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-cyan-500 focus:border-cyan-500"/>
+      </div>
+      <div>
+        <label htmlFor="description" className="block text-sm font-medium text-gray-700">Description (Optional)</label>
+        <textarea id="description" value={description} onChange={(e) => setDescription(e.target.value)} rows="3" className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-cyan-500 focus:border-cyan-500"></textarea>
       </div>
       
       <div>

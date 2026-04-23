@@ -49,6 +49,7 @@ export default async function handler(req, res) {
                         issuer: Array.isArray(fields.issuer) ? fields.issuer[0] : fields.issuer,
                         issueDate: Array.isArray(fields.issueDate) ? fields.issueDate[0] : fields.issueDate,
                         certificateUrl: Array.isArray(fields.certificateUrl) ? fields.certificateUrl[0] : fields.certificateUrl,
+                        description: Array.isArray(fields.description) ? fields.description[0] : fields.description,
                     };
 
                     const imageFile = files.image ? (Array.isArray(files.image) ? files.image[0] : files.image) : null;

@@ -67,7 +67,7 @@ export default function AboutSection() {
                             <p><span className={`font-bold w-20 inline-block ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>Name</span> : G.H.D.B. Ashen</p>
                             <p><span className={`font-bold w-20 inline-block ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>From</span> : Kalutara  </p>
                             <p><span className={`font-bold w-20 inline-block ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>Email</span> : ghdbashen@gmail.com</p>
-                            <p><span className={`font-bold w-20 inline-block ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>CGPA</span> : 3.17</p>
+                            <p><span className={`font-bold w-20 inline-block ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>CGPA</span> : 3.16</p>
                         </div>
 
                         <a

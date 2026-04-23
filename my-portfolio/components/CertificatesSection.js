@@ -29,7 +29,12 @@ const CertificateCard = ({ cert, index, isDarkMode }) => {
         <div className="p-6">
           <p className="text-cyan-500 text-xs font-bold uppercase tracking-wider mb-2">{cert.issuer}</p>
           <h3 className={`text-xl font-bold mb-1 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>{cert.title}</h3>
-          <p className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>{cert.issueDate}</p>
+          <p className={`text-sm mb-3 ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>{cert.issueDate}</p>
+          {cert.description && (
+            <p className={`text-sm leading-relaxed ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+              {cert.description}
+            </p>
+          )}
         </div>
       </div>
     </div>
