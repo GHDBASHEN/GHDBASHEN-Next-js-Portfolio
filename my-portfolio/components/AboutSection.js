@@ -39,13 +39,13 @@ export default function AboutSection() {
 
                     {/* Left Column: Image */}
                     <div className={`flex justify-center transition-all duration-1000 ease-out ${inView ? 'opacity-100 -translate-x-0' : 'opacity-0 -translate-x-10'}`}>
-                        <div className={`relative rounded-full overflow-hidden ${isFlipping ? 'animate-flip-quick gradient-overlay' : ''}`}>
+                        <div className={`relative rounded-3xl overflow-hidden shadow-2xl ${isFlipping ? 'animate-flip-quick gradient-overlay' : ''}`}>
                             <Image
                                 src="/profile.jpg" // Kept your .jpg change
                                 alt="A picture of me"
                                 width={350}
                                 height={350}
-                                className="rounded-full shadow-2xl object-cover transition-transform duration-300 hover:scale-105"
+                                className="object-cover transition-transform duration-300 hover:scale-105"
                             />
                         </div>
                     </div>

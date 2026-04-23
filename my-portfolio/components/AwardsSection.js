@@ -1,9 +1,10 @@
 import { useInView } from 'react-intersection-observer';
 import Image from 'next/image';
+import { useState } from 'react';
 import { useTheme } from '../context/ThemeContext';
 import AnimatedBackground from './AnimatedBackground';
 
-const AwardItem = ({ award, index, isDarkMode }) => {
+const AwardItem = ({ award, index, isDarkMode, onImageClick }) => {
   const { ref, inView } = useInView({ triggerOnce: true, threshold: 0.1 });
 
   return (
@@ -14,14 +15,22 @@ const AwardItem = ({ award, index, isDarkMode }) => {
     >
       <div className={`p-6 rounded-2xl border backdrop-blur-md transition-all duration-300 hover:scale-[1.02] ${isDarkMode ? 'bg-gray-900/40 border-gray-700 hover:border-amber-500/50' : 'bg-white/60 border-gray-200 hover:border-amber-400'}`}>
         <div className="flex flex-col md:flex-row items-center gap-6">
-          <div className="relative w-24 h-24 shrink-0 overflow-hidden rounded-full border-2 border-amber-500/30 p-1">
-             <div className="relative w-full h-full rounded-full overflow-hidden">
+          <div 
+            className="relative w-24 h-24 shrink-0 overflow-hidden rounded-full border-2 border-amber-500/30 p-1 cursor-pointer group/award"
+            onClick={() => onImageClick(award.imageUrl)}
+          >
+             <div className="relative w-full h-full rounded-full overflow-hidden bg-gray-100 dark:bg-gray-900/50">
                 <Image
                   src={award.imageUrl}
                   alt={award.title}
                   fill
-                  className="object-cover"
+                  className="object-contain transition-transform duration-300 group-hover/award:scale-110"
                 />
+                <div className="absolute inset-0 bg-black/20 opacity-0 group-hover/award:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5 text-white">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607zM10.5 7.5v6m3-3h-6" />
+                  </svg>
+                </div>
              </div>
           </div>
           <div className="flex-1 text-center md:text-left">
@@ -44,10 +53,38 @@ const AwardItem = ({ award, index, isDarkMode }) => {
 
 export default function AwardsSection({ awards }) {
   const { isDarkMode } = useTheme();
+  const [selectedImage, setSelectedImage] = useState(null);
 
   return (
     <section id="awards" className="relative py-20 overflow-hidden">
       <AnimatedBackground />
+
+      {/* Image Modal */}
+      {selectedImage && (
+        <div 
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/90 backdrop-blur-sm p-4 md:p-10"
+          onClick={() => setSelectedImage(null)}
+        >
+          <button 
+            className="absolute top-6 right-6 text-white hover:text-amber-500 transition-colors z-[110]"
+            onClick={() => setSelectedImage(null)}
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-10 h-10">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+          <div className="relative w-full h-full flex items-center justify-center">
+            <Image 
+              src={selectedImage} 
+              alt="Full view" 
+              fill 
+              className="object-contain"
+              priority
+            />
+          </div>
+        </div>
+      )}
+
       <div className="container mx-auto px-6 relative z-10">
         <div className="flex flex-col items-center mb-16">
            <div className="bg-amber-500/10 p-3 rounded-2xl mb-4">
@@ -64,7 +101,13 @@ export default function AwardsSection({ awards }) {
         {awards.length > 0 ? (
           <div className="max-w-4xl mx-auto space-y-6">
             {awards.map((award, index) => (
-              <AwardItem key={award._id} award={award} index={index} isDarkMode={isDarkMode} />
+              <AwardItem 
+                key={award._id} 
+                award={award} 
+                index={index} 
+                isDarkMode={isDarkMode} 
+                onImageClick={setSelectedImage}
+              />
             ))}
           </div>
         ) : (
