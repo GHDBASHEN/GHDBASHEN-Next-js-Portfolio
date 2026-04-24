@@ -29,9 +29,9 @@ export default function HomePage({ projects, certificates, awards }) {
 export async function getStaticProps() {
   await dbConnect();
 
-  const projectResult = await Project.find({}).sort({ createdAt: 1 });
-  const certificatesResult = await Certificate.find({}).sort({ createdAt: -1 });
-  const awardsResult = await Award.find({}).sort({ createdAt: -1 });
+  const projectResult = await Project.find({}).sort({ order: 1, createdAt: 1 });
+  const certificatesResult = await Certificate.find({}).sort({ order: 1, createdAt: -1 });
+  const awardsResult = await Award.find({}).sort({ order: 1, createdAt: -1 });
 
   const projects = JSON.parse(JSON.stringify(projectResult));
   const certificates = JSON.parse(JSON.stringify(certificatesResult));
