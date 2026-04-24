@@ -22,20 +22,70 @@ export default function Navbar() {
     }
   };
 
-  const AuthLinks = () => (
+  const NavLinks = ({ mobile = false, onClick = () => {} }) => (
+    <>
+      <Link
+        href="/#home"
+        className={`text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium ${mobile ? 'block' : ''}`}
+        onClick={onClick}
+      >
+        Home
+      </Link>
+      <Link
+        href="/#about"
+        className={`text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium ${mobile ? 'block' : ''}`}
+        onClick={onClick}
+      >
+        About
+      </Link>
+      <Link
+        href="/#services"
+        className={`text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium ${mobile ? 'block' : ''}`}
+        onClick={onClick}
+      >
+        Services
+      </Link>
+      <Link
+        href="/#certificates"
+        className={`text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium ${mobile ? 'block' : ''}`}
+        onClick={onClick}
+      >
+        Certifications
+      </Link>
+      <Link
+        href="/#awards"
+        className={`text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium ${mobile ? 'block' : ''}`}
+        onClick={onClick}
+      >
+        Awards
+      </Link>
+      <Link
+        href="/#projects"
+        className={`text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium ${mobile ? 'block' : ''}`}
+        onClick={onClick}
+      >
+        Projects
+      </Link>
+    </>
+  );
+
+  const AuthLinks = ({ mobile = false, onClick = () => {} }) => (
     <>
       {isLoggedIn ? (
         <>
           <Link
             href="/admin"
-            className="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium block"
-            onClick={() => setIsOpen(false)}
+            className={`text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium ${mobile ? 'block' : ''}`}
+            onClick={onClick}
           >
             Dashboard
           </Link>
           <button
-            onClick={handleLogout}
-            className="text-left w-full md:w-auto ml-0 md:ml-4 text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium bg-red-500 hover:bg-red-600"
+            onClick={() => {
+              handleLogout();
+              onClick();
+            }}
+            className={`text-left ml-0 md:ml-4 text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium bg-red-500 hover:bg-red-600 ${mobile ? 'w-full' : 'md:w-auto'}`}
           >
             Logout
           </button>
@@ -43,8 +93,8 @@ export default function Navbar() {
       ) : (
         <Link
           href="/admin/login"
-          className="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium block"
-          onClick={() => setIsOpen(false)}
+          className={`text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium ${mobile ? 'block' : ''}`}
+          onClick={onClick}
         >
           Admin Login
         </Link>
@@ -61,7 +111,9 @@ export default function Navbar() {
         </Link>
 
         {/* Desktop Menu */}
-        <div className="hidden md:flex items-center">
+        <div className="hidden md:flex items-center space-x-1">
+          <NavLinks />
+          <div className="h-6 w-px bg-gray-700 mx-2"></div>
           <AuthLinks />
         </div>
 
@@ -97,10 +149,11 @@ export default function Navbar() {
       </div>
 
       {/* Mobile Menu Dropdown */}
-      {/* We keep a dark background HERE so the links are readable when the menu is open */}
-      <div className={`${isOpen ? "block" : "hidden"} md:hidden mt-4 pb-4 border-t border-gray-700 bg-black/80 rounded-lg p-2`}>
-        <div className="flex flex-col space-y-2 mt-2">
-           <AuthLinks />
+      <div className={`${isOpen ? "block" : "hidden"} md:hidden mt-4 pb-4 border-t border-gray-700 bg-black/90 backdrop-blur-md rounded-xl p-4 shadow-2xl transition-all duration-300`}>
+        <div className="flex flex-col space-y-1">
+           <NavLinks mobile onClick={() => setIsOpen(false)} />
+           <div className="h-px w-full bg-gray-800 my-2"></div>
+           <AuthLinks mobile onClick={() => setIsOpen(false)} />
         </div>
       </div>
     </nav>
