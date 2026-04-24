@@ -38,11 +38,13 @@ export default function Header() {
         </div>
 
         {/* Centered Navigation */}
-        <nav className="flex-none flex justify-center bg-black/30 backdrop-blur-md rounded-full px-6 py-2 border border-white/10">
+        <nav className="flex-none flex justify-center bg-black/30 backdrop-blur-md rounded-full px-8 py-2 border border-white/10">
             <ul className="flex items-center space-x-6 text-sm font-medium">
               <li><Link href="/#home" className="text-gray-200 hover:text-white transition-colors">Home</Link></li>
               <li><Link href="/#about" className="text-gray-200 hover:text-white transition-colors">About</Link></li>
               <li><Link href="/#services" className="text-gray-200 hover:text-white transition-colors">Services</Link></li>
+              <li><Link href="/#certificates" className="text-gray-200 hover:text-white transition-colors">Certifications</Link></li>
+              <li><Link href="/#awards" className="text-gray-200 hover:text-white transition-colors">Awards</Link></li>
               <li><Link href="/#projects" className="text-gray-200 hover:text-white transition-colors">Projects</Link></li>
             </ul>
         </nav>
@@ -95,6 +97,8 @@ export default function Header() {
           <Link href="/#home" onClick={() => setIsOpen(false)} className="text-gray-200 hover:text-white text-lg">Home</Link>
           <Link href="/#about" onClick={() => setIsOpen(false)} className="text-gray-200 hover:text-white text-lg">About</Link>
           <Link href="/#services" onClick={() => setIsOpen(false)} className="text-gray-200 hover:text-white text-lg">Services</Link>
+          <Link href="/#certificates" onClick={() => setIsOpen(false)} className="text-gray-200 hover:text-white text-lg">Certifications</Link>
+          <Link href="/#awards" onClick={() => setIsOpen(false)} className="text-gray-200 hover:text-white text-lg">Awards</Link>
           <Link href="/#projects" onClick={() => setIsOpen(false)} className="text-gray-200 hover:text-white text-lg">Projects</Link>
           <div className="border-t border-gray-700 pt-4 mt-2">
             {isLoggedIn && (
