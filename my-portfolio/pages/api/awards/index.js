@@ -19,7 +19,7 @@ export default async function handler(req, res) {
     if (req.method === 'GET') {
         try {
             await dbConnect();
-            const awards = await Award.find({}).sort({ createdAt: -1 });
+            const awards = await Award.find({}).sort({ order: 1, createdAt: -1 });
             return res.status(200).json(awards);
         } catch (error) {
             console.error('API GET ERROR (Awards):', error);
@@ -42,12 +42,18 @@ export default async function handler(req, res) {
                 const uploadResult = await cloudinary.uploader.upload(imageFile.filepath, {
                     folder: "portfolio_awards",
                 });
+
+                // Get current max order
+                const lastAward = await Award.findOne().sort('-order');
+                const nextOrder = lastAward && lastAward.order !== undefined ? lastAward.order + 1 : 0;
+
                 const awardData = {
                     title: Array.isArray(fields.title) ? fields.title[0] : fields.title,
                     organization: Array.isArray(fields.organization) ? fields.organization[0] : fields.organization,
                     year: Array.isArray(fields.year) ? fields.year[0] : fields.year,
                     description: Array.isArray(fields.description) ? fields.description[0] : fields.description,
                     imageUrl: uploadResult.secure_url,
+                    order: nextOrder,
                 };
                 const newAward = await Award.create(awardData);
                 return res.status(201).json(newAward);

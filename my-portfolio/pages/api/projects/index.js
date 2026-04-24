@@ -23,8 +23,8 @@ export default async function handler(req, res) {
         try {
             await dbConnect();
 
-            // This line finds all projects and sorts them by creation date (newest first)
-            const projects = await Project.find({}).sort({ createdAt: 1 });
+            // This line finds all projects and sorts them by order (ascending)
+            const projects = await Project.find({}).sort({ order: 1, createdAt: 1 });
 
             return res.status(200).json(projects);
 
@@ -49,11 +49,17 @@ export default async function handler(req, res) {
                 const uploadResult = await cloudinary.uploader.upload(imageFile.filepath, {
                     folder: "portfolio_projects",
                 });
+
+                // Get current max order
+                const lastProject = await Project.findOne().sort('-order');
+                const nextOrder = lastProject && lastProject.order !== undefined ? lastProject.order + 1 : 0;
+
                 const projectData = {
                     name: Array.isArray(fields.name) ? fields.name[0] : fields.name,
                     description: Array.isArray(fields.description) ? fields.description[0] : fields.description,
                     projectUrl: Array.isArray(fields.projectUrl) ? fields.projectUrl[0] : fields.projectUrl,
                     imageUrl: uploadResult.secure_url,
+                    order: nextOrder,
                 };
                 const newProject = await Project.create(projectData);
                 return res.status(201).json(newProject);

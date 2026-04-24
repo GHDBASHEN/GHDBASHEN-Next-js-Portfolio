@@ -19,7 +19,7 @@ export default async function handler(req, res) {
     if (req.method === 'GET') {
         try {
             await dbConnect();
-            const certificates = await Certificate.find({}).sort({ createdAt: -1 });
+            const certificates = await Certificate.find({}).sort({ order: 1, createdAt: -1 });
             return res.status(200).json(certificates);
         } catch (error) {
             console.error('API GET ERROR (Certificates):', error);
@@ -42,6 +42,11 @@ export default async function handler(req, res) {
                 const uploadResult = await cloudinary.uploader.upload(imageFile.filepath, {
                     folder: "portfolio_certificates",
                 });
+
+                // Get current max order
+                const lastCert = await Certificate.findOne().sort('-order');
+                const nextOrder = lastCert && lastCert.order !== undefined ? lastCert.order + 1 : 0;
+
                 const certificateData = {
                     title: Array.isArray(fields.title) ? fields.title[0] : fields.title,
                     issuer: Array.isArray(fields.issuer) ? fields.issuer[0] : fields.issuer,
@@ -49,6 +54,7 @@ export default async function handler(req, res) {
                     certificateUrl: Array.isArray(fields.certificateUrl) ? fields.certificateUrl[0] : fields.certificateUrl,
                     description: Array.isArray(fields.description) ? fields.description[0] : fields.description,
                     imageUrl: uploadResult.secure_url,
+                    order: nextOrder,
                 };
                 const newCertificate = await Certificate.create(certificateData);
                 return res.status(201).json(newCertificate);

@@ -24,6 +24,10 @@ const CertificateSchema = new mongoose.Schema({
     type: String,
     required: [true, 'Please provide an image URL.'],
   },
+  order: {
+    type: Number,
+    default: 0,
+  },
   createdAt: {
     type: Date,
     default: Date.now,
