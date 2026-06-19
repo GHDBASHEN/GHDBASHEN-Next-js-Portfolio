@@ -39,12 +39,22 @@ export default function AboutSection() {
             {/* Background elements */}
             <AnimatedBackground />
 
-            {/* Aerospace Navigation Grid Overlay - Tinted sky-blue/amber based on current daylight index */}
-            <div className={`absolute inset-0 bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_50%,#000_70%,transparent_100%)] pointer-events-none ${
-                isDarkMode 
-                    ? 'bg-[linear-gradient(to_right,#0891b210_1px,transparent_1px),linear-gradient(to_bottom,#0891b210_1px,transparent_1px)]' 
-                    : 'bg-[linear-gradient(to_right,#0284c715_1px,transparent_1px),linear-gradient(to_bottom,#0284c715_1px,transparent_1px)]'
-            }`} />
+            {/* FIXED HUD BLUEPRINT GRID OVERLAY: 
+              Added a top mask boundary (from transparent at 0px to full black at 120px) 
+              to completely clean up and shield your fixed header from background grid overlap.
+            */}
+            <div 
+                className={`absolute inset-0 bg-[size:4rem_4rem] pointer-events-none transition-all duration-500`}
+                style={{
+                    backgroundImage: isDarkMode
+                        ? `linear-gradient(to right, #0891b212 1px, transparent 1px), linear-gradient(to bottom, #0891b212 1px, transparent 1px)`
+                        : `linear-gradient(to right, #0284c718 1px, transparent 1px), linear-gradient(to bottom, #0284c718 1px, transparent 1px)`,
+                    maskImage: `linear-gradient(to bottom, transparent 0px, black 120px), radial-gradient(ellipse 60% 50% at 50% 50%, black 70%, transparent 100%)`,
+                    WebkitMaskImage: `linear-gradient(to bottom, transparent 0px, black 120px), radial-gradient(ellipse 60% 50% at 50% 50%, black 70%, transparent 100%)`,
+                    maskComposite: 'intersect',
+                    WebkitMaskComposite: 'source-in'
+                }}
+            />
 
             <div ref={inViewRef} className="container mx-auto px-6 py-20 relative z-10">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
