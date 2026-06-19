@@ -58,10 +58,10 @@ export default function HomeSection() {
         </p>
 
         <h1 
-          className={`text-6xl md:text-8xl lg:text-9xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r mb-6 tracking-tighter drop-shadow-lg ${isDarkMode ? 'from-white via-gray-200 to-gray-400' : 'from-gray-900 via-gray-700 to-gray-500'} ${getAnimationClasses()}`} 
+          className={`text-6xl md:text-8xl lg:text-7xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r mb-6 tracking-tighter drop-shadow-lg ${isDarkMode ? 'from-white via-gray-200 to-gray-400' : 'from-gray-900 via-gray-700 to-gray-500'} ${getAnimationClasses()}`} 
           style={{ transitionDelay: '400ms' }}
         >
-          DEVELOPER
+          SOFTWARE ENGINEER
         </h1>
 
         <p className={`text-lg md:text-2xl mb-10 max-w-2xl leading-relaxed ${isDarkMode ? 'text-gray-300' : 'text-gray-800'} ${getAnimationClasses()}`} style={{ transitionDelay: '600ms' }}>
