@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import { useInView } from 'react-intersection-observer';
-import { useRef, useState, useEffect } from 'react';
+import { useRef, useState } from 'react';
 import { useTheme } from '../context/ThemeContext'; // Import Theme Hook
 import AnimatedBackground from './AnimatedBackground'; // Import Background
 

@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import Cookies from 'js-cookie';
 // IMPORT THE HOOK
 import { useTheme } from '../context/ThemeContext';

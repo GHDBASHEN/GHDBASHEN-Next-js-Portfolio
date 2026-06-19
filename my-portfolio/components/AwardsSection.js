@@ -78,7 +78,7 @@ const AwardItem = ({ award, index, isDarkMode, onImageClick }) => {
 
             {/* Supplying Institution/Organization Tag */}
             <p className="text-amber-500/90 font-mono font-bold tracking-[0.15em] mb-3 text-xs uppercase">
-              // HOST_INSTITUTION: {award.organization}
+              {"//"} HOST_INSTITUTION: {award.organization}
             </p>
 
             {award.description && (
